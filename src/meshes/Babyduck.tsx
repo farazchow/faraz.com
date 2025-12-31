@@ -6,11 +6,11 @@ Files: public/models/babyduck.glb [2.37MB] > C:\Users\notfa\Desktop\PersonalProj
 
 import * as THREE from 'three'
 import React, { useEffect, useMemo, useState } from 'react'
-import { useFrame, useGraph } from '@react-three/fiber'
+import { invalidate, useFrame, useGraph } from '@react-three/fiber'
 import { useGLTF, useAnimations, Outlines } from '@react-three/drei'
 import { type GLTF, SkeletonUtils } from 'three-stdlib'
 import type { ShaderProps } from '../utils/ShaderAbstract'
-import type CustomShaderMaterial from 'three-custom-shader-material/vanilla'
+import CustomShaderMaterial from 'three-custom-shader-material/vanilla'
 import { useControls } from 'leva'
 
 type ActionName = 'ArmatureAction.001'
@@ -37,10 +37,16 @@ function Babyduck(props: ShaderProps) {
   const group = React.useRef<THREE.Group>(null!);
   const [hovered, setHover] = useState(false);
 
+  // Materials - Initialize with placeholder
+  const [BeakMat, setBeakMat] = useState<THREE.Material | CustomShaderMaterial>(() => new THREE.MeshStandardMaterial());
+  const [BodyMat, setBodyMat] = useState<THREE.Material | CustomShaderMaterial>(() => new THREE.MeshStandardMaterial());
+
   const { scene, animations } = useGLTF('/models/babyduck-transformed.glb');
   const clone = React.useMemo(() => SkeletonUtils.clone(scene), [scene]);
   const { nodes, materials } = (useGraph(clone) as unknown) as GLTFResult ;
   const { actions, names } = useAnimations(animations, group);
+  const baseBeakMat = materials['Material.002'];
+  const baseBodyMat = materials['Material.003'];
 
   const mesh1 = React.useRef<THREE.SkinnedMesh>(null!);
   const mesh2 = React.useRef<THREE.SkinnedMesh>(null!);
@@ -53,35 +59,33 @@ function Babyduck(props: ShaderProps) {
   const options = useControls(props.shader.getLevaControls());
 
   // Materials
-  const BeakMat = useMemo(() =>  
-    {
-      const base = materials['Material.002'];
-      if (base && (base.map)) {
-        return base;
+  useEffect(() => {
+    if (baseBeakMat && baseBeakMat.color) {
+      const clonedMat = baseBeakMat.clone();
+      clonedMat.wireframe = props.wireframe ?? false;
+      clonedMat.flatShading = props.flatShading ?? false;
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setBeakMat(props.shader.CreateMaterial(clonedMat));
+    }
+  }, [baseBeakMat, baseBeakMat.map, props.wireframe, props.flatShading, props.shader]);
 
-        base.wireframe = props.wireframe ?? false;
-        base.flatShading = props.flatShading ?? false;
-        return props.shader.CreateMaterial(base);
-      }
-    }, [materials, props]
-  );  
-  const MainBodyMat = useMemo(() =>  
-    {
-      const base = materials['Material.003'];
-      if (base && (base.map)) {
-        return base; 
-        
-        base.wireframe = props.wireframe ?? false;
-        base.flatShading = props.flatShading ?? false;
-        return props.shader.CreateMaterial(base);
-      }
-    }, [materials, props]
-  );
+  useEffect(() => {
+    if (baseBodyMat && baseBodyMat.map) {
+      const clonedMat = baseBodyMat.clone();
+      clonedMat.wireframe = props.wireframe ?? false;
+      clonedMat.flatShading = props.flatShading ?? false;
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setBodyMat(props.shader.CreateMaterial(clonedMat));
+    }
+  }, [baseBodyMat, baseBodyMat.map, props.wireframe, props.flatShading, props.shader]);
 
   // Animation Loop and shader uniforms update
   useFrame((state, delta) => {
     // Return early if they aren't setup;
-    if (!(BeakMat && MainBodyMat)) {
+    if (!(BeakMat instanceof CustomShaderMaterial) || 
+      !(BodyMat instanceof CustomShaderMaterial) || 
+      !mesh1.current || 
+      !mesh2.current) {
       return;
     }
 
@@ -113,8 +117,8 @@ function Babyduck(props: ShaderProps) {
           }}
         >
           <skinnedMesh name="Beak" ref={mesh1} geometry={nodes.Cube002.geometry} material={BeakMat} skeleton={nodes.Cube002.skeleton} />
-          <skinnedMesh name="MainBody" ref={mesh2} geometry={nodes.Cube002_1.geometry} material={MainBodyMat} skeleton={nodes.Cube002_1.skeleton} >
-            {hovered && <Outlines thickness={3} color="white" />}
+          <skinnedMesh name="MainBody" ref={mesh2} geometry={nodes.Cube002_1.geometry} material={BodyMat} skeleton={nodes.Cube002_1.skeleton} >
+            {hovered && <Outlines thickness={3} color="#00c6ff" />}
           </skinnedMesh>
         </group>
       </group>

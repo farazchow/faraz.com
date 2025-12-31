@@ -88,7 +88,6 @@ export default class BayerDitherShader extends Shader {
         gl_FragColor.rgb = orderedDither(lum, color);
     `;
     uniforms: Record<string, IUniform>;
-    cacheKey?: () => string;
 
     constructor(bias: number, grayScale: boolean = false, color?: THREE.Color) {
         super();

@@ -4,7 +4,7 @@ import { type IUniform, Color } from "three";
 import * as THREE from "three";
 import CustomShaderMaterial from "three-custom-shader-material/vanilla";
 
-export default class TestShader extends Shader {
+export default class DebugShader extends Shader {
     postLighting: boolean = true;
     vertexShader: string = `
             uniform float u_time;
@@ -12,9 +12,9 @@ export default class TestShader extends Shader {
 
             void main() {
                 vUv = uv;
-                // vec3 modelPosition = position;
-                // modelPosition.z += sin(modelPosition.x * 4.0 + u_time * 2.0) * 0.2;
-                // csm_Position = modelPosition;
+                vec3 modelPosition = position;
+                modelPosition.z += sin(modelPosition.x * 4.0 + u_time * 2.0) * 0.2;
+                csm_Position = modelPosition;
             }
         `;
     fragmentShader: string = `
@@ -23,8 +23,8 @@ export default class TestShader extends Shader {
             vec3 TestVector = vec3(.6, .4, .2);
 
             void main() {
-                // csm_FragColor.rgb = mix(csm_DiffuseColor.rgb, u_color, vUv.x);
-                // csm_FragColor.rgb = vec3((vUv.x + vUv.y)/2.0);
+                csm_FragColor.rgb = mix(csm_DiffuseColor.rgb, u_color, vUv.x);
+                csm_FragColor.rgb = vec3((vUv.x + vUv.y)/2.0);
             }
     `;
     postLightingCode: string = `
@@ -32,12 +32,13 @@ export default class TestShader extends Shader {
     `
     uniforms: Record<string, IUniform>;
 
-    constructor(color: Color) {
+    constructor(color: Color, density: number = 1) {
         super();
         this.uniforms = {
             u_time: {value: 0.0},
             u_resolution: {value: new THREE.Vector2(window.innerWidth, window.innerHeight)},
-            u_color: {value: color}
+            u_color: {value: color},
+            u_density: {value: density},
         };
     }
 

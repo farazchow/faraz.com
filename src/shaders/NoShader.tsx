@@ -5,7 +5,6 @@ import CustomShaderMaterial from "three-custom-shader-material/vanilla";
 
 export default class NoShader extends Shader {
     uniforms: Record<string, IUniform>;
-    cacheKey?: () => string;
 
     constructor() {
         super();

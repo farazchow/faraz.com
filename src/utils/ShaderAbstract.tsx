@@ -17,7 +17,7 @@ export abstract class Shader {
         void main() { }
     `;
     abstract uniforms: Record<string, IUniform>;
-    abstract cacheKey?: () => string;
+    cacheKey?: () => string = () => {return Math.random().toFixed(5)};
     abstract UpdateUniforms(material: CustomShaderMaterial, state: RootState, options?: SchemaToValues<Schema>) : void;
     postLighting: boolean = false;
     postLightingCode: string = ``;

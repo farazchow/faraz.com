@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { RootState } from "@react-three/fiber";
 import { Shader } from "../utils/ShaderAbstract";
 import { type IUniform } from "three";
@@ -9,6 +10,7 @@ import type { SchemaToValues, Schema } from "leva/dist/declarations/src/types";
 export default class ToonShader extends Shader {
     postLighting: boolean = true;
     fragmentShader: string = `
+        // A dumb man's toon shader
         varying vec2 vUv;
         uniform float u_binaryThreshold;
         uniform float u_cellShadingThreshold;
@@ -95,16 +97,14 @@ export default class ToonShader extends Shader {
 
     `;
     uniforms: Record<string, IUniform>;
-    cacheKey?: () => string;
 
-    constructor(
-    ) {
+    constructor() {
         super();
         this.uniforms = {
             u_time: {value: 0.0},
             u_resolution: {value: new THREE.Vector2(window.innerWidth, window.innerHeight)},
             u_binaryThreshold: {value: .15},
-            u_light: {value: new THREE.Color("#eea47f")},
+            u_light: {value: new THREE.Color("#edd57e")},
             u_dark: {value: new THREE.Color("#00539c")},
             u_cellShadingThreshold: {value: 0.3},
             u_cellShading: {value: 0.3},
@@ -126,7 +126,7 @@ export default class ToonShader extends Shader {
     getLevaControls() {
         return {
             u_light: {
-                value: "#eea47f",
+                value: "#edd57e",
             },
             u_dark: {
                 value: "#00539c",
