@@ -5,8 +5,8 @@ Files: public/models/babyduck.glb [2.37MB] > C:\Users\notfa\Desktop\PersonalProj
 */
 
 import * as THREE from 'three'
-import React, { useEffect, useMemo, useState } from 'react'
-import { invalidate, useFrame, useGraph } from '@react-three/fiber'
+import React, { useEffect, useState } from 'react'
+import { useFrame, useGraph } from '@react-three/fiber'
 import { useGLTF, useAnimations, Outlines } from '@react-three/drei'
 import { type GLTF, SkeletonUtils } from 'three-stdlib'
 import type { ShaderProps } from '../utils/ShaderAbstract'
@@ -51,12 +51,16 @@ function Babyduck(props: ShaderProps) {
   const mesh1 = React.useRef<THREE.SkinnedMesh>(null!);
   const mesh2 = React.useRef<THREE.SkinnedMesh>(null!);
 
+  // Animation Time offset
+  // eslint-disable-next-line react-hooks/purity
+  const timeOffset =  Math.random() * 2 * Math.PI;
+
   // Play Default Animations
   useEffect(() => {
     actions[names[0]]?.reset().play();
   }, [actions, names])
 
-  const options = useControls(props.shader.getLevaControls());
+  // const options = useControls(props.shader.getLevaControls());
 
   // Materials
   useEffect(() => {
@@ -80,7 +84,7 @@ function Babyduck(props: ShaderProps) {
   }, [baseBodyMat, baseBodyMat.map, props.wireframe, props.flatShading, props.shader]);
 
   // Animation Loop and shader uniforms update
-  useFrame((state, delta) => {
+  useFrame((state) => {
     // Return early if they aren't setup;
     if (!(BeakMat instanceof CustomShaderMaterial) || 
       !(BodyMat instanceof CustomShaderMaterial) || 
@@ -89,17 +93,17 @@ function Babyduck(props: ShaderProps) {
       return;
     }
 
-    props.shader.UpdateUniforms((mesh1.current.material as CustomShaderMaterial), state, options);
-    props.shader.UpdateUniforms((mesh2.current.material as CustomShaderMaterial), state, options);
+    props.shader.UpdateUniforms((mesh1.current.material as CustomShaderMaterial), state);
+    props.shader.UpdateUniforms((mesh2.current.material as CustomShaderMaterial), state);
 
-    if (!hovered) {
-      group.current.rotateY(delta);
-    }
+    group.current.position.y = Math.cos(state.clock.elapsedTime/2 + timeOffset) / 16 + .05;
   });
 
   return (
     <group ref={group} 
       {...props} 
+      scale={1/3}
+      rotation={[0, -Math.PI/4, 0]}
       dispose={null}
     >
       <group name="Scene">
@@ -118,7 +122,7 @@ function Babyduck(props: ShaderProps) {
         >
           <skinnedMesh name="Beak" ref={mesh1} geometry={nodes.Cube002.geometry} material={BeakMat} skeleton={nodes.Cube002.skeleton} />
           <skinnedMesh name="MainBody" ref={mesh2} geometry={nodes.Cube002_1.geometry} material={BodyMat} skeleton={nodes.Cube002_1.skeleton} >
-            {hovered && <Outlines thickness={3} color="#00c6ff" />}
+            {hovered && <Outlines thickness={3} color="#ffffff" />}
           </skinnedMesh>
         </group>
       </group>

@@ -1,4 +1,4 @@
-import { MeshPhysicalMaterial, Mesh, MeshPhongMaterial, MeshLambertMaterial } from 'three';
+import { Mesh, MeshLambertMaterial } from 'three';
 import { useMemo, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import type { ShaderProps } from '../utils/ShaderAbstract';

@@ -7,36 +7,35 @@ import CustomShaderMaterial from "three-custom-shader-material/vanilla";
 import { useControls } from "leva";
 
 const TestPlane = (props: ShaderProps) => {
-    // This reference will give us direct access to the mesh
     const mesh = useRef<Mesh>(null!);
     const [material, setMaterial] = useState<THREE.Material | CustomShaderMaterial>(null!);
 
-
     useEffect(() => {
-        const mat = new THREE.MeshStandardMaterial();
+        const mat = new THREE.MeshToonMaterial();
+        mat.color = new THREE.Color("blue");
         mat.wireframe = props.wireframe ?? false;
-        mat.flatShading = props.flatShading ?? true;
-        mat.side = props.side ?? THREE.FrontSide;
+        mat.side = props.side ?? THREE.DoubleSide;
+        mat.opacity = 1;
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setMaterial(props.shader.CreateMaterial(mat));
     }, [props.shader, props.flatShading, props.wireframe, props.side]);
 
     const options = useControls(props.shader.getLevaControls());
 
-    useFrame((state) => {
-        props.shader.UpdateUniforms((mesh.current.material as CustomShaderMaterial), state, options);
+    useFrame((state, delta) => {
+        props.shader.UpdateUniforms((mesh.current.material as CustomShaderMaterial), state, options, delta);
     });
 
     return (
         <mesh 
             ref={mesh} 
             position={props.position ?? [0, 0, 0]}  
-            rotation={[-Math.PI / 2, 0, 0]} 
+            rotation={[-Math.PI/2, 0, -Math.PI/4]} 
             scale={1} 
             material={material}
             {...props.meshProps}
         >
-            <planeGeometry args={[4, 4, 32, 32]} />
+            <planeGeometry args={[40, 40, 256, 256]} />
         </mesh>
     );
 };
