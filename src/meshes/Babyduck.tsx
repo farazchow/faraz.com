@@ -5,13 +5,14 @@ Files: public/models/babyduck.glb [2.37MB] > C:\Users\notfa\Desktop\PersonalProj
 */
 
 import * as THREE from 'three'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useFrame, useGraph } from '@react-three/fiber'
 import { useGLTF, useAnimations, Outlines } from '@react-three/drei'
 import { type GLTF, SkeletonUtils } from 'three-stdlib'
 import type { ShaderProps } from '../utils/ShaderAbstract'
 import CustomShaderMaterial from 'three-custom-shader-material/vanilla'
-import { useControls } from 'leva'
+import { NavContext } from '../components/NavContext'
+// import { useControls } from 'leva'
 
 type ActionName = 'ArmatureAction.001'
 
@@ -34,6 +35,8 @@ type GLTFResult = GLTF & {
 }
 
 function Babyduck(props: ShaderProps) {
+  const { navState, setNavState } = useContext(NavContext);
+  const [inspect, setInspect] = useState(false);
   const group = React.useRef<THREE.Group>(null!);
   const [hovered, setHover] = useState(false);
 
@@ -83,6 +86,18 @@ function Babyduck(props: ShaderProps) {
     }
   }, [baseBodyMat, baseBodyMat.map, props.wireframe, props.flatShading, props.shader]);
 
+  // Inspect View
+  useEffect(() => {
+    if (inspect) {
+      group.current.rotateX(-42 * Math.PI/180);
+      const closeFactor = .6;
+      group.current.position.set(-2 - (2 * closeFactor), 3 * closeFactor, 2 * closeFactor);
+    } else {
+      group.current.position.set(props.position?.x ?? 0, props.position?.y ?? 0, props.position?.z ?? 0);
+      group.current.rotation.set(0, -Math.PI/4, 0);
+    }
+  }, [inspect, group, props.position]);
+
   // Animation Loop and shader uniforms update
   useFrame((state) => {
     // Return early if they aren't setup;
@@ -96,8 +111,30 @@ function Babyduck(props: ShaderProps) {
     props.shader.UpdateUniforms((mesh1.current.material as CustomShaderMaterial), state);
     props.shader.UpdateUniforms((mesh2.current.material as CustomShaderMaterial), state);
 
-    group.current.position.y = Math.cos(state.clock.elapsedTime/2 + timeOffset) / 16 + .05;
+    if (!inspect) {
+      group.current.position.y = Math.sin(state.clock.elapsedTime/2 + timeOffset) / 16 + .05;
+      group.current.position.x += Math.sin(state.clock.elapsedTime/2 + timeOffset) / 2000;
+      group.current.position.z += Math.sin(state.clock.elapsedTime/2 + timeOffset) / 2000;
+    } else {
+      group.current.rotateY(Math.sin(state.clock.elapsedTime/2 + timeOffset) / 100);
+    }
   });
+
+  function onClick() {
+    const state = {
+        objID: props.objID ?? 0,
+    };
+    setNavState(state);
+    setInspect(true);
+  }
+
+  function clickOff() {
+    const state = {
+        objID: 0,
+    };
+    setNavState(state);
+    setInspect(false);
+  }
 
   return (
     <group ref={group} 
@@ -112,11 +149,18 @@ function Babyduck(props: ShaderProps) {
           <primitive object={nodes.Bone003} />
         </group>
         <group name="baby_duck"
-          onPointerOver={() => setHover(true)}
-          onPointerOut={() => setHover(false)}
-          onPointerDown={() => {
+          onPointerOver={() => setHover(!inspect && true)}
+          onPointerOut={() => setHover(!inspect && false)}
+          onClick={(e) => {
             if (hovered) {
-              console.log("Duck clicked");
+              e.stopPropagation();
+              onClick()
+            }
+          }}
+          onPointerMissed={(e) => {
+            if (inspect) {
+              e.stopPropagation();
+              clickOff();
             }
           }}
         >

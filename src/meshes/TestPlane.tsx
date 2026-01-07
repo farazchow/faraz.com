@@ -4,7 +4,6 @@ import { Mesh } from "three";
 import * as THREE from "three";
 import type { ShaderProps } from "../utils/ShaderAbstract";
 import CustomShaderMaterial from "three-custom-shader-material/vanilla";
-import { useControls } from "leva";
 
 const TestPlane = (props: ShaderProps) => {
     const mesh = useRef<Mesh>(null!);
@@ -20,10 +19,10 @@ const TestPlane = (props: ShaderProps) => {
         setMaterial(props.shader.CreateMaterial(mat));
     }, [props.shader, props.flatShading, props.wireframe, props.side]);
 
-    const options = useControls(props.shader.getLevaControls());
+    // const options = useControls(props.shader.getLevaControls());
 
-    useFrame((state, delta) => {
-        props.shader.UpdateUniforms((mesh.current.material as CustomShaderMaterial), state, options, delta);
+    useFrame((state) => {
+        props.shader.UpdateUniforms((mesh.current.material as CustomShaderMaterial), state);
     });
 
     return (

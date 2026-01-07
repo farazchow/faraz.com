@@ -50,5 +50,4 @@ export default function Snow(props: {count: number}) {
             </instancedMesh>
         </>
     );
-
 }

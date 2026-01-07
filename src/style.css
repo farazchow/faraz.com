@@ -1,0 +1,64 @@
+.app {
+    margin: 0;
+    height: 100vh;
+    width: 100vw;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    margin: 0;
+    height: 100vh;
+    width: 100vw;
+    pointer-events: none;
+}
+
+.navbar {
+    /* Centering */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    left: 50%;
+    transform: translateX(-50%);
+    position: absolute;
+
+    /* Size */
+    height: 50px;
+    width: 70%;
+
+    /* Graphics */
+    background: #23375C;
+    background: radial-gradient(circle,#23375c 0%, #235c5c 100%);
+    color: #d7d7d7;
+    border-style: solid;
+    border-radius: 25px;
+    border-color: #888888;
+    border-width: 2px;
+    pointer-events: auto;
+
+    /* Animations */
+    transition: top .5s cubic-bezier(.69,-0.25,.48,.5);
+}
+
+.navbar > div {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 25px;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color .5s ease-out;
+}
+
+.navbar > div:hover {
+    background-color: #598392;
+    color: white;
+}
+
+.navbar#down {
+    top: 20px;
+}
+
+.navbar#up {
+    top: -100px;
+}

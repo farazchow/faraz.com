@@ -62,4 +62,5 @@ export interface ShaderProps {
     side?: Side;
     position?: THREE.Vector3;
     flatShading?: boolean;
+    objID?: number;
 };

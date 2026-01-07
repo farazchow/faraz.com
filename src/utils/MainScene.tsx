@@ -1,3 +1,4 @@
+// Three
 import * as THREE from "three";
 import { Stats } from "@react-three/drei";
 import { useMemo } from "react";
@@ -7,6 +8,7 @@ import { useThree } from "@react-three/fiber";
 import Babyduck from "../meshes/Babyduck";
 import TestPlane from "../meshes/TestPlane";
 import Snow from "../meshes/Snow";
+import MainDuck from "../meshes/MainDuck";
 
 // Shaders 
 import BayerDitherShader from "../shaders/BayerDitherShader";
@@ -42,6 +44,11 @@ export default function MainScene() {
         return shader;
       }, []);
 
+      const mainDitherShader = useMemo(() => {
+        const shader = new BayerDitherShader(.3, false, new THREE.Color("#79bd75"));
+        return shader;
+      }, []);
+
       useThree((state) => {
         state.camera.lookAt(new THREE.Vector3(-2, 0, 0));
       });
@@ -49,16 +56,17 @@ export default function MainScene() {
       return (
         <>
           {/* Lights */}
-          <ambientLight intensity={2} />
+          <ambientLight intensity={.75} />
           <spotLight position={[10, 10, 10]} angle={0.2} decay={0} intensity={Math.PI} />
-          <pointLight position={[0, 20, 2]} decay={1} intensity={10} />
-          <Snow count={1000}/>
+          <pointLight position={[-5, 20, 5]} decay={1} intensity={10} />
+          <Snow count={2000}/>
 
           {/* Highlightable Objects */}
-          <Babyduck shader={ditherShader} position={new THREE.Vector3(-4, .1, -4)}  />
-          <Babyduck shader={noShader} position={new THREE.Vector3(-2, .1, -2)} />
-          <Babyduck shader={toonShader} position={new THREE.Vector3(-4, .1, -2)} flatShading={true} />
-          <Babyduck shader={colorOverrideShader} position={new THREE.Vector3(-2, .1, -4)} wireframe={true}/>
+          <MainDuck shader={mainDitherShader} position={new THREE.Vector3(1, -.3, 1)} objID={1}/>
+          <Babyduck shader={ditherShader} position={new THREE.Vector3(-4, .05, -4)} objID={2}/>
+          <Babyduck shader={noShader} position={new THREE.Vector3(-2, .05, -2)} objID={3}/>
+          <Babyduck shader={toonShader} position={new THREE.Vector3(-4, .05, -2)} flatShading={true} objID={4}/>
+          <Babyduck shader={colorOverrideShader} position={new THREE.Vector3(-2, .05, -4)} wireframe={true} objID={5}/>
           
           <TestPlane shader={oceanShader} position={new THREE.Vector3(0, 0, 0)} wireframe={false} />
 
@@ -66,6 +74,7 @@ export default function MainScene() {
           <Stats />
           {/* <axesHelper args={[100]}/> */}
           {/* <gridHelper args={[20, 20, 0xffffff]}/> */}
+          {/* <OrbitControls /> */}
         </>
       );
 }
