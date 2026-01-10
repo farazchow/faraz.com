@@ -47,7 +47,7 @@ export default class OceanShader extends Shader {
     ocean: Ocean;
     delta: number = 0;
 
-    constructor(color1: THREE.Color, color2: THREE.Color, density: number = 4, dotSize: number = 1,) {
+    constructor(color1: THREE.Color, color2: THREE.Color, density: number = 5, dotSize: number = 1,) {
         super();
 
         this.ocean = new Ocean();

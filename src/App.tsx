@@ -1,12 +1,12 @@
 import { Canvas } from '@react-three/fiber';
-import { useProgress, Html} from '@react-three/drei';
-import { Suspense, useState } from 'react';
+import { useProgress, Html } from '@react-three/drei';
+import { Suspense, useRef, useState } from 'react';
 
 import './style.css';
 import MainScene from './utils/MainScene';
-import Overlay from './components/Overlay';
 import { defaultState, NavContext, type NavState } from './components/NavContext';
-
+import Navbar from './components/Navbar';
+import Post from './components/Post';
 
 function Loader() {
   const {progress} = useProgress();
@@ -15,6 +15,7 @@ function Loader() {
 
 function App() {
   const [navState, setNavState] = useState<NavState>(defaultState);
+  const postRef = useRef<HTMLDivElement>(null!);
 
   return (
       <div className='app'>
@@ -22,17 +23,29 @@ function App() {
           <Canvas
             // eslint-disable-next-line react-hooks/purity
             key={Math.random()} 
-            camera={{position: [-4, 3, 2]}} 
+            camera={{position: [0, 3, 5], fov: 30, zoom: .5}} 
             style={{background: "Black"}}
           >
             <Suspense fallback={<Loader />}>
               <MainScene />
             </Suspense>
-          </Canvas>    
-          <Overlay />    
+          </Canvas>
+          <div className='overlay' >
+            <Navbar />
+            <Post ref={postRef} />
+          </div>
         </NavContext.Provider>
       </div>
   );
 }
 
 export default App
+
+
+/**
+ * TODO:
+ * Change the overlay context to specifically be "postRefContext"
+ * Make it so that the ducks can automatically inspect when the objID is changed by another button
+ * Find a nice font for ui
+ * Figure out how to efficiently load/store the blog posts
+ */

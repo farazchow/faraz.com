@@ -5,8 +5,8 @@ Files: ./public/models/duck.glb [474.98KB] > C:\Users\notfa\Desktop\PersonalProj
 */
 
 import * as THREE from 'three'
-import React, { useContext, useEffect, useState } from 'react'
-import { useFrame, useGraph } from '@react-three/fiber'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
+import { useFrame, useGraph, type ThreeEvent } from '@react-three/fiber'
 import { useGLTF, useAnimations, Outlines } from '@react-three/drei'
 import { type GLTF, SkeletonUtils } from 'three-stdlib'
 import type { ShaderProps } from '../utils/ShaderAbstract'
@@ -32,8 +32,10 @@ type GLTFResult = GLTF & {
 }
 
 export default function MainDuck(props: ShaderProps) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { navState, setNavState } = useContext(NavContext);
-  const [inspect, setInspect] = useState(false);
+  const closeFactor = .6;
+  const inspectPosition = useMemo(() => {return [-1.25, 3 * closeFactor, 5 * closeFactor]}, []);
 
   const group = React.useRef<THREE.Group>(null!);
   const [hovered, setHover] = useState(false);
@@ -71,10 +73,9 @@ export default function MainDuck(props: ShaderProps) {
 
     props.shader.UpdateUniforms((mesh.current.material as CustomShaderMaterial), state);
 
-    if (!inspect) {
+    if (navState.objID !== props.objID) {
       group.current.position.y = Math.sin(state.clock.elapsedTime/2) / 16 + .05;
       group.current.position.x += Math.sin(state.clock.elapsedTime/3) / 2000;
-      group.current.position.z += Math.sin(state.clock.elapsedTime/3) / 2000;
     } else {
       group.current.rotateY(Math.sin(state.clock.elapsedTime/2) / 100);
     }
@@ -82,32 +83,37 @@ export default function MainDuck(props: ShaderProps) {
 
   // Inspect View
   useEffect(() => {
-    if (inspect) {
-      group.current.rotateX(-42 * Math.PI/180);
-      const closeFactor = .6;
-      group.current.position.set(-2 - (2 * closeFactor), 3 * closeFactor, 2 * closeFactor);
-      group.current.scale.set(1/3, 1/3, 1/3);
+    if (navState.objID === props.objID) {
+      group.current.rotateX(-30 * Math.PI/180);
+      group.current.position.set(inspectPosition[0], inspectPosition[1], inspectPosition[2]);
+      group.current.scale.set(.3, .3, .3);
     } else {
-      group.current.position.set(props.position?.x ?? 0, props.position?.y ?? 0, props.position?.z ?? 0);
-      group.current.rotation.set(0, -Math.PI/4, 0);
       group.current.scale.set(1/2, 1/2, 1/2);
+      group.current.position.set(props.position?.x ?? 0, props.position?.y ?? 0, props.position?.z ?? 0);
+      group.current.rotation.set(0, 0, 0);
     }
-  }, [inspect, group, props.position]);
+  }, [group, props.position, inspectPosition, navState.objID, props.objID]);
 
-  function onClick() {
-    const state = {
+
+  function onClick(e : ThreeEvent<MouseEvent>) {
+    if (hovered) {
+      e.stopPropagation();
+      const state = {
         objID: props.objID ?? 0,
-    };
-    setNavState(state);
-    setInspect(true);
+      };
+      setNavState(state);
+    }
   }
 
-  function clickOff() {
-    const state = {
-        objID: 0,
-    };
-    setNavState(state);
-    setInspect(false);
+  function clickOff(e: MouseEvent) {
+    if (navState.objID === props.objID) {
+      e.stopPropagation();
+      const state = {
+          objID: 0,
+      };
+      setNavState(state);
+    }
+
   }
 
   return (
@@ -116,7 +122,7 @@ export default function MainDuck(props: ShaderProps) {
       {...props} 
       dispose={null}
       scale={1/2}
-      rotation={[0, -Math.PI/4, 0]}
+      rotation={[0, 0, 0]}
     >
       <group name="Scene">
         <group name="Armature" position={[-2.03, 0, 0]}>
@@ -124,27 +130,21 @@ export default function MainDuck(props: ShaderProps) {
           <primitive object={nodes.Bone003} />
         </group>
         <skinnedMesh 
-          onPointerOver={() => setHover(true)}
+          onPointerOver={() => setHover(navState.objID === 0)}
           onPointerOut={() => setHover(false)}
-          onClick={(e) => {
-            if (hovered) {
-              e.stopPropagation();
-              onClick();
-            }
-          }}
-          onPointerMissed={(e) => {
-            if (inspect) {
-              e.stopPropagation();
-              clickOff();
-            }
-          }}
+          onClick={onClick}
+          onPointerMissed={clickOff}
           name="Duck" 
           ref={mesh} 
           geometry={nodes.Duck.geometry} 
           material={mat} 
           skeleton={nodes.Duck.skeleton} 
           position={[-2.03, 0, 0]} >
-          {hovered && <Outlines thickness={3} color="#ffffff" />}
+          {hovered && navState.objID === 0 && 
+          <Outlines 
+            thickness={3} 
+            color="#ffffff" 
+          />}
         </skinnedMesh>
       </group>
     </group>

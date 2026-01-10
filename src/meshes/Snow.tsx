@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/purity */
 import { useFrame } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
 export default function Snow(props: {count: number}) {
@@ -21,6 +21,16 @@ export default function Snow(props: {count: number}) {
         }
         return temp;
     }, [count]);
+
+    useEffect(() => {
+        if (mesh.current) {
+            // Set a large bounding sphere that encompasses all possible positions
+            mesh.current.geometry.boundingSphere = new THREE.Sphere(
+            new THREE.Vector3(0, 6.5, 0), // Center (halfway between -7 and 20)
+            20 // Radius (large enough to cover full range)
+            );
+        }
+    }, []);
 
 
     useFrame((state) => {

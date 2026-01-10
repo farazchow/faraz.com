@@ -10,10 +10,10 @@ const TestPlane = (props: ShaderProps) => {
     const [material, setMaterial] = useState<THREE.Material | CustomShaderMaterial>(null!);
 
     useEffect(() => {
-        const mat = new THREE.MeshToonMaterial();
-        mat.color = new THREE.Color("blue");
+        const mat = new THREE.MeshStandardMaterial();
+        // mat.color = new THREE.Color("blue");
         mat.wireframe = props.wireframe ?? false;
-        mat.side = props.side ?? THREE.DoubleSide;
+        mat.side = props.side ?? THREE.FrontSide;
         mat.opacity = 1;
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setMaterial(props.shader.CreateMaterial(mat));
@@ -34,7 +34,7 @@ const TestPlane = (props: ShaderProps) => {
             material={material}
             {...props.meshProps}
         >
-            <planeGeometry args={[40, 40, 256, 256]} />
+            <planeGeometry args={[80, 80, 256, 256]} />
         </mesh>
     );
 };

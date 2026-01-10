@@ -5,7 +5,7 @@
 }
 
 .overlay {
-    position: absolute;
+    position: fixed;
     top: 0;
     margin: 0;
     height: 100vh;
@@ -24,34 +24,27 @@
     position: absolute;
 
     /* Size */
-    height: 50px;
+    height: 60px;
     width: 70%;
 
     /* Graphics */
-    background: #23375C;
-    background: radial-gradient(circle,#23375c 0%, #235c5c 100%);
     color: #d7d7d7;
-    border-style: solid;
-    border-radius: 25px;
-    border-color: #888888;
-    border-width: 2px;
-    pointer-events: auto;
-
-    /* Animations */
     transition: top .5s cubic-bezier(.69,-0.25,.48,.5);
+    pointer-events: auto;
 }
 
 .navbar > div {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 25px;
-    padding: 10px;
+    padding: 5px 10px;
     border-radius: 10px;
     cursor: pointer;
     transition: background-color .5s ease-out;
+    height: 60%;
 }
 
 .navbar > div:hover {
-    background-color: #598392;
+    background-color: #3e555d;
     color: white;
 }
 
@@ -61,4 +54,42 @@
 
 .navbar#up {
     top: -100px;
+}
+
+.post {
+    /* Size */
+    position: absolute;
+    color: white;
+    margin: 20px;
+    width: calc(60% - 40px);
+    height: calc(100% - 40px);
+
+    /* Position */
+    left: 40%;
+    background: #17171A;
+    pointer-events: auto;
+    overflow-y: scroll;
+    transition: transform .75s ease-out;
+
+    display: flex;
+}
+
+.post#hidden {
+    transform: translateX(120%);
+}
+
+.postContent {
+    padding: 20px;
+}
+
+.closeButton {
+    position: sticky;
+    height: 100%;
+    width: 3%;
+    background-color: #2c2c31;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
 }
