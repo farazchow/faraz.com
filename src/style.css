@@ -104,7 +104,7 @@
 
 .post {
     height: 100%;
-    width: 100%;
+    width: calc(100% - 20px);
     display: flex;
     flex-direction: column;
 }
@@ -113,7 +113,8 @@
     position: sticky;
     top: 0%;
     height: 50px;
-    padding: 20px 0 0 0;
+    width: 95%;
+    padding: 20px 10px 0 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;

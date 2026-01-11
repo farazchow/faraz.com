@@ -5,13 +5,14 @@ Files: public/models/babyduck.glb [2.37MB] > C:\Users\notfa\Desktop\PersonalProj
 */
 
 import * as THREE from 'three'
-import React, { useContext, useEffect, useMemo, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useFrame, useGraph, type ThreeEvent } from '@react-three/fiber'
 import { useGLTF, useAnimations, Outlines } from '@react-three/drei'
 import { type GLTF, SkeletonUtils } from 'three-stdlib'
 import type { ShaderProps } from '../utils/ShaderAbstract'
 import CustomShaderMaterial from 'three-custom-shader-material/vanilla'
 import { NavContext } from '../components/NavContext'
+import useInspectPosition from '../utils/useInspectPosition'
 // import { useControls } from 'leva'
 
 type ActionName = 'ArmatureAction.001'
@@ -36,8 +37,7 @@ type GLTFResult = GLTF & {
 
 function Babyduck(props: ShaderProps) {
   const { navState, setNavState } = useContext(NavContext);
-  const closeFactor = .6;
-  const inspectPosition = useMemo(() => {return [-1.5, 3 * closeFactor, 5 * closeFactor]}, []);
+  const inspectPosition = useInspectPosition(.5, -.6);
 
   const group = React.useRef<THREE.Group>(null!);
   const [hovered, setHover] = useState(false);
@@ -73,7 +73,6 @@ function Babyduck(props: ShaderProps) {
       const clonedMat = baseBeakMat.clone();
       clonedMat.wireframe = props.wireframe ?? false;
       clonedMat.flatShading = props.flatShading ?? false;
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setBeakMat(props.shader.CreateMaterial(clonedMat));
     }
   }, [baseBeakMat, baseBeakMat.map, props.wireframe, props.flatShading, props.shader]);
@@ -83,7 +82,6 @@ function Babyduck(props: ShaderProps) {
       const clonedMat = baseBodyMat.clone();
       clonedMat.wireframe = props.wireframe ?? false;
       clonedMat.flatShading = props.flatShading ?? false;
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setBodyMat(props.shader.CreateMaterial(clonedMat));
     }
   }, [baseBodyMat, baseBodyMat.map, props.wireframe, props.flatShading, props.shader]);

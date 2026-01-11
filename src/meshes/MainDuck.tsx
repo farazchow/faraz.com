@@ -5,13 +5,14 @@ Files: ./public/models/duck.glb [474.98KB] > C:\Users\notfa\Desktop\PersonalProj
 */
 
 import * as THREE from 'three'
-import React, { useContext, useEffect, useMemo, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useFrame, useGraph, type ThreeEvent } from '@react-three/fiber'
 import { useGLTF, useAnimations, Outlines } from '@react-three/drei'
 import { type GLTF, SkeletonUtils } from 'three-stdlib'
 import type { ShaderProps } from '../utils/ShaderAbstract'
 import CustomShaderMaterial from 'three-custom-shader-material/vanilla'
 import { NavContext } from '../components/NavContext'
+import useInspectPosition from '../utils/useInspectPosition'
 
 type ActionName = 'Idle' | 'Look Left' | 'Look Right'
 
@@ -32,10 +33,8 @@ type GLTFResult = GLTF & {
 }
 
 export default function MainDuck(props: ShaderProps) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { navState, setNavState } = useContext(NavContext);
-  const closeFactor = .6;
-  const inspectPosition = useMemo(() => {return [-1.25, 3 * closeFactor, 5 * closeFactor]}, []);
+  const inspectPosition = useInspectPosition(.5, -.5);
 
   const group = React.useRef<THREE.Group>(null!);
   const [hovered, setHover] = useState(false);
