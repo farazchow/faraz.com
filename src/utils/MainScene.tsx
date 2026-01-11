@@ -2,7 +2,6 @@
 import * as THREE from "three";
 import { OrbitControls, Stats } from "@react-three/drei";
 import { useEffect, useMemo, useRef } from "react";
-import { useFrame } from "@react-three/fiber";
 
 // Meshes
 import Babyduck from "../meshes/Babyduck";

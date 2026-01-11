@@ -40,12 +40,3 @@ function App() {
 }
 
 export default App
-
-
-/**
- * TODO:
- * Change the overlay context to specifically be "postRefContext"
- * Make it so that the ducks can automatically inspect when the objID is changed by another button
- * Find a nice font for ui
- * Figure out how to efficiently load/store the blog posts
- */
