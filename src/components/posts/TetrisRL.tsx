@@ -1,4 +1,5 @@
 import '../../style.css';
+import UnderConstruction from '../underConstruction';
 
 function TetrisRL() {
     return (
@@ -7,9 +8,7 @@ function TetrisRL() {
                 Reinforcement Learning with Tetris
             </div>
             <div className='post-content'>
-                <span id="default-text">
-                    Sorry this blog post is still under construction. 😝
-                </span>
+                <UnderConstruction />
             </div>
         </div>
     );

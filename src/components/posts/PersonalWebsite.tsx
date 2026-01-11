@@ -1,15 +1,14 @@
 import '../../style.css';
+import UnderConstruction from '../underConstruction';
 
 function PersonalWebsite() {
     return (
         <div className='post'>
             <div className='post-header'>
-                How I made this website
+                How I made THIS website
             </div>
             <div className='post-content'>
-                <span id="default-text">
-                    Sorry this blog post is still under construction. 😝
-                </span>
+                <UnderConstruction />
             </div>
         </div>
     );

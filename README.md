@@ -1,3 +1,12 @@
+# TODO:
+- Lerp the meshes positions to animate on inspect
+- Fill out blog posts
+- Figure out an easy way to render markdown so that writing blogs are easier
+- Image Carousel for Urop post
+- Figure out code blocks, are they even a good idea?
+- Figure out links to other sections, other posts, etc
+- Add a subtitle field to the post header
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

@@ -1,6 +1,6 @@
 @font-face {
     font-family: Dropline;
-    src: url(DroplineRegular-Wpegz.otf);
+    src: url(/variousAssets/DroplineRegular-Wpegz.otf);
 }
 
 .app {
@@ -10,7 +10,8 @@
 }
 
 .overlay {
-    position: fixed;
+    position: absolute;
+    overflow: hidden;
     top: 0;
     margin: 0;
     height: 100vh;
@@ -53,6 +54,7 @@
 .navbar > div:hover {
     background-color: rgba(62, 85, 93, 1);
     color: white;
+    transform: scale(1.1);
 }
 
 .navbar#down {
@@ -120,24 +122,51 @@
     font-weight: bold;
     font-size: 35px;
     overflow: hidden;
+    white-space: nowrap;
 }
 
 .post-content {
+    height: 100%;
     padding: 10px;
     overflow-y: scroll;
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 80px;
 }
 
 #pdf {
     width: 80%;
-    min-height: 600px;
-    margin: 25px;
+    flex: 1;
+    /* height: 60%; */
 }
 
 #default-text {
     width: 80%;
     font-family: Dropline;
     font-size: 25px;
+}
+
+#under-construction {
+    width: 80%;
+    margin-top: 10%;
+}
+
+.social-container {
+    position: absolute;
+    margin: 20px;
+    bottom: 0%;
+    width: 35px;
+    display: flex;
+    flex-direction: column;
+    pointer-events: auto;
+    gap: 10px;
+}
+
+.audio-button {
+    cursor: pointer;
+}
+
+.social-container > div:hover{
+    transform: scale(1.1);
 }

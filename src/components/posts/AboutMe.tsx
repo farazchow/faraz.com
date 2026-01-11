@@ -16,7 +16,7 @@ function AboutMe() {
                     Feel free to email me at farazchow@gmail.com.
                 </span>
                 <iframe id="pdf"
-                    src="/resume.pdf" 
+                    src="/resume.pdf#view=FitH" 
                     title="Resume PDF"
                 />
             </div>

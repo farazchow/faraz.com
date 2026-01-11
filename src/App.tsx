@@ -7,6 +7,7 @@ import MainScene from './utils/MainScene';
 import { defaultState, NavContext, type NavState } from './components/NavContext';
 import Navbar from './components/Navbar';
 import Post from './components/Post';
+import SocialLinks from './components/SocialLinks';
 
 function Loader() {
   const {progress} = useProgress();
@@ -32,6 +33,7 @@ function App() {
           </Canvas>
           <div className='overlay' >
             <Navbar />
+            <SocialLinks />
             <Post ref={postRef} />
           </div>
         </NavContext.Provider>
