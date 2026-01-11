@@ -7,7 +7,7 @@ import PersonalWebsite from './posts/PersonalWebsite';
 import Urop from './posts/Urop';
 import TetrisRL from './posts/TetrisRL';
 
-const Post = forwardRef<HTMLDivElement>((props, ref) => {
+const Post = forwardRef<HTMLDivElement>((_, ref) => {
     const { navState, setNavState } = useContext(NavContext);
 
     const handleClose = () => {

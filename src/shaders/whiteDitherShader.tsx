@@ -36,7 +36,6 @@ export default class WhiteDitherShader extends Shader {
         gl_FragColor = vec4(whiteNoiseDither(color, lum, gl_FragCoord.xy), 1.0);
     `;
     uniforms: Record<string, IUniform>;
-    cacheKey?: () => string;
 
     constructor(color?: THREE.Color) {
         super();

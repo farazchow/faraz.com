@@ -152,9 +152,3 @@ export default class ToonShader extends Shader {
         }
     }
 }
-
-// Possible color combinations
-const a = {u_light: '#ffdfb9', u_dark: '#a4193d'};
-const b = {u_light: '#eea47f', u_dark: '#00539c'};
-const c = {u_light: '#1a7a4c', u_dark: '#101820'};
-const d = {u_light: '#fcf6f5', u_dark: '#075229'};

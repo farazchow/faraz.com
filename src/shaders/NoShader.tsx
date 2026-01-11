@@ -12,7 +12,7 @@ export default class NoShader extends Shader {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    UpdateUniforms(material: CustomShaderMaterial, state: RootState) {
+    UpdateUniforms(__: CustomShaderMaterial, _: RootState) {
         return;
     }
 }

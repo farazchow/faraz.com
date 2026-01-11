@@ -1,20 +1,20 @@
 // Three
 import * as THREE from "three";
-import { OrbitControls, Stats } from "@react-three/drei";
+import { Stats } from "@react-three/drei";
 import { useEffect, useMemo, useRef } from "react";
 
 // Meshes
-import Babyduck from "../meshes/Babyduck";
-import TestPlane from "../meshes/TestPlane";
-import Snow from "../meshes/Snow";
-import MainDuck from "../meshes/MainDuck";
+import Babyduck from "./meshes/Babyduck";
+import TestPlane from "./meshes/TestPlane";
+import Snow from "./meshes/Snow";
+import MainDuck from "./meshes/MainDuck";
 
 // Shaders 
-import BayerDitherShader from "../shaders/BayerDitherShader";
-import ColorOverrideShader from "../shaders/ColorOverrideShader";
-import NoShader from "../shaders/NoShader";
-import OceanShader from "../shaders/OceanShader";
-import ToonShader from "../shaders/ToonShader";
+import BayerDitherShader from "./shaders/BayerDitherShader";
+import ColorOverrideShader from "./shaders/ColorOverrideShader";
+import NoShader from "./shaders/NoShader";
+import OceanShader from "./shaders/OceanShader";
+import ToonShader from "./shaders/ToonShader";
 
 export default function MainScene() {  
   const spotlightRef = useRef<THREE.SpotLight>(null!);

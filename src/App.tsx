@@ -3,7 +3,7 @@ import { useProgress, Html } from '@react-three/drei';
 import { Suspense, useRef, useState } from 'react';
 
 import './style.css';
-import MainScene from './utils/MainScene';
+import MainScene from './MainScene';
 import { defaultState, NavContext, type NavState } from './components/NavContext';
 import Navbar from './components/Navbar';
 import Post from './components/Post';

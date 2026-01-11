@@ -24,7 +24,7 @@ export default class ColorOverrideShader extends Shader {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    UpdateUniforms(material: CustomShaderMaterial, state: RootState, options?: SchemaToValues<Schema>) {
+    UpdateUniforms(material: CustomShaderMaterial, _: RootState, options?: SchemaToValues<Schema>) {
         if (options) {
             material.uniforms.u_color.value = new Color((options.u_color as string));
         }
