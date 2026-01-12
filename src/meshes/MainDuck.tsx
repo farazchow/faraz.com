@@ -76,7 +76,7 @@ export default function MainDuck(props: ShaderProps) {
       group.current.position.y = Math.sin(state.clock.elapsedTime/2) / 16 + .05;
       group.current.position.x += Math.sin(state.clock.elapsedTime/3) / 2000;
     } else {
-      group.current.rotateY(Math.sin(state.clock.elapsedTime/2) / 100);
+      group.current.rotation.y += 0.005;
     }
   });
 

@@ -116,7 +116,7 @@ function Babyduck(props: ShaderProps) {
       group.current.position.y = Math.sin(state.clock.elapsedTime/2 + timeOffset) / 16 + .075;
       group.current.position.x += Math.sin(state.clock.elapsedTime/2 + timeOffset) / 2000;
     } else {
-      group.current.rotateY(Math.sin(state.clock.elapsedTime/2 + timeOffset) / 100);
+      group.current.rotation.y += 0.005;
     }
   });
 
