@@ -11,7 +11,7 @@ function Navbar() {
 
     return (
         <nav className='navbar' id={objID === 0 ? "down" : "up"}>
-            <div className='aboutMe' onClick={() => navClick(1)}>
+            <div className='aboutMe' onClick={() => navClick(Math.floor(Math.random()*5))}>
                 About Me
             </div>
             <div className='name' id={objID === 0 ? "active": ""} onClick={() => navClick(0)}>
